@@ -18,3 +18,4 @@
 # vscode stuff
 .vscode
 launch.json
+__debug_bin

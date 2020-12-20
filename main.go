@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math"
 	"math/rand"
 	"time"
 )
@@ -22,30 +21,24 @@ func generate(n int, maxValue int) ([]int, []int) {
 	return D, Z
 }
 
-func calcOneCity(n int, D []int, Z []int, index int, roadLength int) int64 {
-	var total int64 = 0
-	for i := 0; i < n; i++ {
-		dist := D[index] - D[i]
-		if dist < 0 {
-			dist = -dist
-		}
-		dist = int(math.Min(float64(dist), float64(roadLength-dist)))
-		total += (int64(dist) * int64(Z[i]))
-	}
-	return total
-}
-
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
+	//generate new problem
 	nPartitions := 4
-	n := 40000
+	n := 20000
 	maxValue := 10000
 	D, Z := generate(n, maxValue)
 
+	//example problem
 	//n := 3
-	//D := []int{7, 1, 4}
+	//D := []int{1, 4, 7}
 	//Z := []int{10, 13, 5}
+
+	//cyclic rotation for ease of computation
+	auxiliary := D[n-1]
+	D = D[:n-1]
+	D = append([]int{auxiliary}, D...)
 
 	//prefix sum
 	for i := 1; i < n; i++ {
@@ -59,15 +52,23 @@ func main() {
 	r := bruteForce(n, D, Z)
 	elapsed := time.Since(start)
 
-	fmt.Printf("%d\n%d\n", r.index, r.value)
-	fmt.Printf("%f\n", elapsed.Seconds())
+	fmt.Printf("Standard:\nIndex: %d\nValue: %d\n", r.index, r.value)
+	fmt.Printf("Time:  %f\n", elapsed.Seconds())
 
 	//concurrent
 	startConc := time.Now()
 	rConc := concurrentBruteForce(n, D, Z, nPartitions)
 	elapsedConc := time.Since(startConc)
 
-	fmt.Printf("%d\n%d\n", rConc.index, rConc.value)
-	fmt.Printf("%f\n", elapsedConc.Seconds())
+	fmt.Printf("Concurrent:\nIndex: %d\nValue: %d\n", rConc.index, rConc.value)
+	fmt.Printf("Time:  %f\n", elapsedConc.Seconds())
+
+	//linear
+	startLin := time.Now()
+	rLin := linear(n, D, Z)
+	elapsedLin := time.Since(startLin)
+
+	fmt.Printf("Linear:\nIndex: %d\nValue: %d\n", rLin.index, rLin.value)
+	fmt.Printf("Time:  %f\n", elapsedLin.Seconds())
 
 }
