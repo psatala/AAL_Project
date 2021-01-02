@@ -28,6 +28,9 @@ func concurrentCalc(n int, D []int, Z []int, begin int, end int, ch chan result)
 }
 
 func concurrentBruteForce(n int, D []int, Z []int, nPartitions int) (r result) {
+	if nPartitions > n/2 {
+		nPartitions = n/2
+	}
 	r.index = -1
 	r.value = math.MaxInt64
 
