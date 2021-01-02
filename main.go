@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"math/rand"
 	"time"
+	"os"
+	"strconv"
 )
 
 type result struct {
@@ -24,19 +26,9 @@ func generate(n int, maxValue int) ([]int, []int) {
 	return D, Z
 }
 
-func main() {
-	rand.Seed(time.Now().UnixNano())
-
-	//generate new problem
+func solveForUser(D []int, Z []int) {
 	nPartitions := 4
-	n := 20000
-	maxValue := 10000
-	D, Z := generate(n, maxValue)
-
-	//example problem
-	//n := 3
-	//D := []int{1, 4, 7}
-	//Z := []int{10, 13, 5}
+	n := len(D)
 
 	//cyclic rotation for ease of computation
 	auxiliary := D[n-1]
@@ -52,10 +44,10 @@ func main() {
 
 	//standard
 	start := time.Now()
-	r := bruteForce(n, D, Z)
+	result := bruteForce(n, D, Z)
 	elapsed := time.Since(start)
 
-	fmt.Printf("Standard:\nIndex: %d\nValue: %d\n", r.index, r.value)
+	fmt.Printf("Standard:\nIndex: %d\nValue: %d\n", result.index, result.value)
 	fmt.Printf("Time:  %f\n", elapsed.Seconds())
 
 	//concurrent
@@ -73,5 +65,98 @@ func main() {
 
 	fmt.Printf("Linear:\nIndex: %d\nValue: %d\n", rLin.index, rLin.value)
 	fmt.Printf("Time:  %f\n", elapsedLin.Seconds())
+}
 
+//Returns time of bruteForce, concurrentBruteForce, linear, and bool that is true if all solutions are equal and false otherwise
+// func solveForAnalysis(D []int, Z []int) (float64, float64, float64, bool)
+
+func main() {
+	args := os.Args[1:]
+	D := make([]int, 0)
+	Z := make([]int, 0)
+	var n int = 1000
+	var maxValue int = 10000
+	var ok bool = true
+	var err error
+	var step int = 500
+	var seed int64 = time.Now().UnixNano()
+	var k int = 1
+	var r int = 1
+	var modeId int = 1
+	if len(args) < 1 {
+		printHelp()
+		return
+	}
+	if args[0] == "-m1" {
+		modeId = 1
+		D, Z, ok = getFullInput()
+		n = len(D)
+		if !ok {
+			fmt.Printf("Blad wczytywania danych\n")
+			printHelp()
+			return
+		}
+	} else if args[0] == "-m2" || args[0] == "-m3" {
+		modeId = 2
+		for i := 1; i < len(args); i += 1 {
+			switch args[i][:2] {
+			case "-n":
+				n, err = strconv.Atoi(args[i][2:])
+				if err != nil {
+					fmt.Printf("Bledny parametr n\n")
+					return
+				}
+			case "-w":
+				maxValue, err = strconv.Atoi(args[i][2:])
+				if err != nil {
+					fmt.Printf("Bledny parametr w\n")
+					return
+				}
+			case "-k":
+				k, err = strconv.Atoi(args[i][2:])
+				if err != nil {
+					fmt.Printf("Bledny parametr k\n")
+					return
+				}
+			case "-t":
+				step, err = strconv.Atoi(args[i][2:])
+				if err != nil {
+					fmt.Printf("Bledny parametr t\n")
+					return
+				}
+			case "-s":
+				var tempSeed int
+				tempSeed, err = strconv.Atoi(args[i][2:])
+				if err != nil {
+					fmt.Printf("Bledny parametr s\n")
+					return
+				}
+				seed = int64(tempSeed)
+			case "-r":
+				r, err = strconv.Atoi(args[i][2:])
+				if err != nil {
+					fmt.Printf("Bledny parametr r\n")
+					return
+				}
+			}
+		}
+		rand.Seed(seed)
+	} else {
+		printHelp()
+		return
+	}
+
+	if modeId == 1 {
+		solveForUser(D, Z)
+	} else {
+		for k > 0 {
+			for r > 0 {
+				D, Z = generate(n, maxValue)
+				solveForUser(D, Z)
+				r -= 1
+			}
+			k -= 1
+			n += step
+		}
+	}
 }
