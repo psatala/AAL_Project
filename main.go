@@ -150,10 +150,11 @@ func main() {
 		solveForUser(D, Z)
 	} else {
 		for k > 0 {
-			for r > 0 {
+			rCount := r
+			for rCount > 0 {
 				D, Z = generate(n, maxValue)
 				solveForUser(D, Z)
-				r -= 1
+				rCount -= 1
 			}
 			k -= 1
 			n += step

@@ -23,14 +23,12 @@ func printHelp() {
 	fmt.Printf("\tW trybie m2:\n")
 	fmt.Printf("\t\t-n - wielkosc problemu (domyslnie 1000)\n")
 	fmt.Printf("\t\t-w - maksymalna wartosc liczb w D i Z (domyslnie 10000)\n")
-	fmt.Printf("\t\t-s - wartosc seed dla generatora liczb pseudolosowych (domyslnie aktualny czas systemowy)")
+	fmt.Printf("\t\t-s - wartosc seed dla generatora liczb pseudolosowych (domyslnie aktualny czas systemowy)\n")
 
 	fmt.Printf("\tW trybie m3 parametry trybu m2 i dodatkowo:\n")
-	fmt.Printf("\t\t-n - wielkosc pierwszego problemu (domyslnie 1000)\n")
 	fmt.Printf("\t\t-k - liczba roznych wielkosci n w sekwencji generowanych problemow (domyslnie 1)\n")
 	fmt.Printf("\t\t-t - roznica miedzy kolejnymi rozmiarami problemu n w sekwencji (step) (domyslnie 500)\n")
 	fmt.Printf("\t\t-r - liczba wygenerowanych instacji problemu dla kazdego n (domyslnie 1)\n")
-	fmt.Printf("\t\t-w - maksymalna wartosc liczb w D i Z (domyslnie 10000)\n")
 	fmt.Printf("\nPrzyklad uruchomienia:\n")
 	fmt.Printf("\t./AAL_Project -m3 -n1000 -k30 -t500 -r10 -w10000\n\n")
 }
