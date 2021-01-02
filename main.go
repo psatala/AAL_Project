@@ -1,3 +1,6 @@
+// Epidemia
+// Piotr Satala, Piotr Libera
+
 package main
 
 import (
