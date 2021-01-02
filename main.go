@@ -11,9 +11,22 @@ import (
 	"strconv"
 )
 
+// 0 - algorytm liniowy
+// 1 - algorytm brutalny
+// 2 - alborytm brutalny wspolbiezny
+const analyzedAlgorithm int = 0
+
 type result struct {
 	index int
 	value int64
+}
+
+// Przewidywana zlozonosc T(n)
+func T (n int) int {
+	if analyzedAlgorithm > 0{
+		return n*n
+	}
+	return n
 }
 
 func generate(n int, maxValue int) ([]int, []int) {
@@ -77,12 +90,18 @@ func solveForAnalysis(D []int, Z []int) time.Duration {
 	for i := 1; i < n; i++ {
 		D[i] += D[i-1]
 	}
-	//linear
-	startLin := time.Now()
-	linear(n, D, Z)
-	linearTime := time.Since(startLin)
 
-	return linearTime
+	start := time.Now()
+	if analyzedAlgorithm == 1 {
+		bruteForce(n, D, Z)
+	} else if analyzedAlgorithm == 2 {
+		concurrentBruteForce(n, D, Z, 4)
+	} else {
+		linear(n, D, Z)
+	}
+	algorithmTime := time.Since(start)
+
+	return algorithmTime
 }
 
 func main() {
@@ -192,10 +211,10 @@ func main() {
 			n += step
 		}
 		n -= step*k
-		c := float64(linearTimes[k/2]) / float64((n+step*(k/2)))
+		c := float64(linearTimes[k/2]) / float64(T(n+step*(k/2)))
 		fmt.Printf("n \t t(n)[ms] \t q(n)\n")
 		for i := 0; i < k; i += 1 {
-			fmt.Printf("%d \t %f \t %f\n", n+step*i, float64(linearTimes[i])/1e6, float64(linearTimes[i])/(c*float64(n+step*i)))
+			fmt.Printf("%d \t %f \t %f\n", n+step*i, float64(linearTimes[i])/1e6, float64(linearTimes[i])/(c*float64(T(n+step*i))))
 		}
 	}
 }

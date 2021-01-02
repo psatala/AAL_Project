@@ -24,7 +24,7 @@ W przypadku przyjętej przez nas numeracji miast od 0
 ## TODO
 
 - sprawdzanie poprawnosci brutem w solveForAnalysis przy malych n (zeby automatycznie sprawdzic liniowke)
-- analiza nie tylko dla liniowki ale tez bruta
+- wybor algo do analizy w CLI
 - generowanie danych losowe, ale dodac tez przypadki szczegolne i na nich tez sprawdzic
 
 - czysty kod i czysta kompilacja
