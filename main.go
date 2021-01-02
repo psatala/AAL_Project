@@ -67,8 +67,23 @@ func solveForUser(D []int, Z []int) {
 	fmt.Printf("Time:  %f\n", elapsedLin.Seconds())
 }
 
-//Returns time of bruteForce, concurrentBruteForce, linear, and bool that is true if all solutions are equal and false otherwise
-// func solveForAnalysis(D []int, Z []int) (float64, float64, float64, bool)
+func solveForAnalysis(D []int, Z []int) time.Duration {
+	n := len(D)
+	//cyclic rotation for ease of computation
+	auxiliary := D[n-1]
+	D = D[:n-1]
+	D = append([]int{auxiliary}, D...)
+	//prefix sum
+	for i := 1; i < n; i++ {
+		D[i] += D[i-1]
+	}
+	//linear
+	startLin := time.Now()
+	linear(n, D, Z)
+	linearTime := time.Since(startLin)
+
+	return linearTime
+}
 
 func main() {
 	args := os.Args[1:]
@@ -97,7 +112,11 @@ func main() {
 			return
 		}
 	} else if args[0] == "-m2" || args[0] == "-m3" {
-		modeId = 2
+		if args[0] == "-m2" {
+			modeId = 2
+		} else {
+			modeId = 3
+		}
 		for i := 1; i < len(args); i += 1 {
 			switch args[i][:2] {
 			case "-n":
@@ -148,16 +167,35 @@ func main() {
 
 	if modeId == 1 {
 		solveForUser(D, Z)
+	} else if modeId == 2{
+		D, Z = generate(n, maxValue)
+		solveForUser(D, Z)
 	} else {
-		for k > 0 {
+		linearTimes := make([]int, k)
+		var lt time.Duration
+		kCount := 0
+		for kCount < k {
 			rCount := r
+			var lts time.Duration
 			for rCount > 0 {
 				D, Z = generate(n, maxValue)
-				solveForUser(D, Z)
+				lt= solveForAnalysis(D, Z)
+				if !ok {
+					fmt.Printf("Wyniki metody brutalnej i liniowej byly rozne")
+					return
+				}
+				lts += lt
 				rCount -= 1
 			}
-			k -= 1
+			linearTimes[kCount] =int(lts.Nanoseconds()) / r
+			kCount += 1
 			n += step
+		}
+		n -= step*k
+		c := float64(linearTimes[k/2]) / float64((n+step*(k/2)))
+		fmt.Printf("n \t t(n)[ms] \t q(n)\n")
+		for i := 0; i < k; i += 1 {
+			fmt.Printf("%d \t %f \t %f\n", n+step*i, float64(linearTimes[i])/1e6, float64(linearTimes[i])/(c*float64(n+step*i)))
 		}
 	}
 }

@@ -23,10 +23,8 @@ W przypadku przyjętej przez nas numeracji miast od 0
 
 ## TODO
 
-- 3 tryby wywolania: 
-    - full - z wejscia pobierane wszystko, mozna np przekierowac plik na wejscie
-    - random - okreslenie metaparametrow przez uzytkownika
-    - presentation - program samodzielnie uruchamia random dla roznych n wybranych przez uzytkownika (np opisane jako wartosc minimalna, liczba testow i step miedzy n-ami, dla kazdego n-a 10 uruchomien), stworzenie tabeli wynikow oceny zlozonosci. W tabeli 3 kolumny: ni (n posortowane rosnaco od gory na dol), czas wykonania t(ni), q(n) = t(n)/(c*T(n)) gdzie c = t(n_mediana)/T(n_mediana)
+- sprawdzanie poprawnosci brutem w solveForAnalysis przy malych n (zeby automatycznie sprawdzic liniowke)
+- analiza nie tylko dla liniowki ale tez bruta
 - generowanie danych losowe, ale dodac tez przypadki szczegolne i na nich tez sprawdzic
 
 - czysty kod i czysta kompilacja
@@ -43,3 +41,7 @@ W przypadku przyjętej przez nas numeracji miast od 0
 
 ## DONE
 - UI z wyswietlaniem pomocy
+- 3 tryby wywolania: 
+    - full - z wejscia pobierane wszystko, mozna np przekierowac plik na wejscie
+    - random - okreslenie metaparametrow przez uzytkownika
+    - presentation - program samodzielnie uruchamia random dla roznych n wybranych przez uzytkownika (np opisane jako wartosc minimalna, liczba testow i step miedzy n-ami, dla kazdego n-a 10 uruchomien), stworzenie tabeli wynikow oceny zlozonosci. W tabeli 3 kolumny: ni (n posortowane rosnaco od gory na dol), czas wykonania t(ni), q(n) = t(n)/(c*T(n)) gdzie c = t(n_mediana)/T(n_mediana)
