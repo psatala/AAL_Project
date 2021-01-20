@@ -18,6 +18,7 @@ Przykładowe dane wejściowe
 Wyjście
 ```
 1
+30
 ```
 W przypadku przyjętej przez nas numeracji miast od 0
 
