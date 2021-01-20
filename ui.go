@@ -23,6 +23,7 @@ func printHelp() {
 	fmt.Printf("\t\t-n - wielkosc problemu (domyslnie 1000)\n")
 	fmt.Printf("\t\t-w - maksymalna wartosc liczb w D i Z (domyslnie 10000)\n")
 	fmt.Printf("\t\t-s - wartosc seed dla generatora liczb pseudolosowych (domyslnie aktualny czas systemowy)\n")
+	fmt.Printf("\t\t-c - umożliwia określenie maksymalnych odległości miedzy miastami 0..n i generacje specjalnego przypadku, w ktorym miasta leza blisko siebie (domyslnie wylaczone)\n")
 	fmt.Printf("\t\t-g - wybor analizowanego algorytmu (domyslnie 0):\n")
 	fmt.Printf("\t\t\t0 - algorytm liniowy\n")
 	fmt.Printf("\t\t\t1 - algorytm brutalny\n")

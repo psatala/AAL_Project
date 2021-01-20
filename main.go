@@ -24,12 +24,26 @@ func T (n int, analyzedAlgorithm int) int {
 	return n
 }
 
-func generate(n int, maxValue int) ([]int, []int) {
+func generate(n int, maxValue int, maxD int) ([]int, []int) {
 	D := make([]int, n)
 	Z := make([]int, n)
-	for i := 0; i < n; i++ {
-		D[i] = rand.Intn(maxValue)
-		Z[i] = rand.Intn(maxValue)
+	if maxD >= 0 {
+		for i := 0; i < n; i++ {
+			D[i] = rand.Intn(maxD)
+			if D[i] == 0 {
+				D[i] = 1
+			}
+			Z[i] = rand.Intn(maxValue)
+		}
+		D[n-1] = rand.Intn(maxValue)
+	} else {
+		for i := 0; i < n; i++ {
+			D[i] = rand.Intn(maxValue)
+			if D[i] == 0 {
+				D[i] = 1
+			}
+			Z[i] = rand.Intn(maxValue)
+		}
 	}
 	return D, Z
 }
@@ -120,6 +134,7 @@ func main() {
 	var seed int64 = time.Now().UnixNano()
 	var k int = 1
 	var r int = 1
+	var maxD int = -1
 	var modeId int = 1
 	if len(args) < 1 {
 		printHelp()
@@ -166,6 +181,12 @@ func main() {
 					fmt.Printf("Bledny parametr g\n")
 					return
 				}
+			case "-c":
+				maxD, err = strconv.Atoi(args[i][2:])
+				if err != nil {
+					fmt.Printf("Bledny parametr c\n")
+					return
+				}
 			case "-t":
 				step, err = strconv.Atoi(args[i][2:])
 				if err != nil {
@@ -197,7 +218,7 @@ func main() {
 	if modeId == 1 {
 		solveForUser(D, Z)
 	} else if modeId == 2{
-		D, Z = generate(n, maxValue)
+		D, Z = generate(n, maxValue, maxD)
 		solveForUser(D, Z)
 	} else {
 		linearTimes := make([]int, k)
@@ -207,7 +228,7 @@ func main() {
 			rCount := r
 			var lts time.Duration
 			for rCount > 0 {
-				D, Z = generate(n, maxValue)
+				D, Z = generate(n, maxValue, maxD)
 				lt= solveForAnalysis(D, Z, analyzedAlgorithm)
 				if !ok {
 					fmt.Printf("Wyniki metody brutalnej i liniowej byly rozne")

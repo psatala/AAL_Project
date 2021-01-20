@@ -43,6 +43,8 @@ Opcje uruchomienia:
 	- `-n` - wielkosc problemu (domyslnie 1000)
 	- `-w` - maksymalna wartosc liczb w `D` i `Z` (domyslnie 10000)
 	- `-s` - wartosc seed dla generatora liczb pseudolosowych (domyslnie aktualny czas systemowy)
+    - `-c` - umożliwia określenie maksymalnych odległości między miastami 0..n i generację specjalnego przypadku, w którym miasta leżą blisko siebie (domyślnie wyłączone)
+
 	- `-g` - wybor analizowanego algorytmu (domyslnie 0):
 		- `0` - algorytm liniowy
 		- `1` - algorytm brutalny
@@ -71,9 +73,3 @@ W trakcie pomiaru czasu algorytmu optymalnego dla małych n (n <= 1000) dodatkow
 
 
 TODO inne informacje dodatkowe o szczególnych decyzjach projektowych (np. ograniczenia dotyczące rozmiaru  problemu,  charakterystyki  generatorów  danych  testowych,  specjalne  konwencje  w alokacji  pamięci  dynamicznej,  wymagania  dotyczące  typów  parametryzujących    szablony,  konwencje związane z obsługą sytuacji wyjątkowych, itp.)
-
-
-
-
-## TODO
-- generowanie danych losowe, ale dodac tez przypadki szczegolne i na nich tez sprawdzic
