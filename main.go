@@ -11,18 +11,13 @@ import (
 	"strconv"
 )
 
-// 0 - algorytm liniowy
-// 1 - algorytm brutalny
-// 2 - alborytm brutalny wspolbiezny
-const analyzedAlgorithm int = 0
-
 type result struct {
 	index int
 	value int64
 }
 
 // Przewidywana zlozonosc T(n)
-func T (n int) int {
+func T (n int, analyzedAlgorithm int) int {
 	if analyzedAlgorithm > 0{
 		return n*n
 	}
@@ -80,7 +75,7 @@ func solveForUser(D []int, Z []int) {
 	fmt.Printf("Time:  %f\n", elapsedLin.Seconds())
 }
 
-func solveForAnalysis(D []int, Z []int) time.Duration {
+func solveForAnalysis(D []int, Z []int, analyzedAlgorithm int) time.Duration {
 	n := len(D)
 	//cyclic rotation for ease of computation
 	auxiliary := D[n-1]
@@ -92,15 +87,23 @@ func solveForAnalysis(D []int, Z []int) time.Duration {
 	}
 
 	start := time.Now()
+	algorithmTime := time.Since(start)
 	if analyzedAlgorithm == 1 {
 		bruteForce(n, D, Z)
+		algorithmTime = time.Since(start)
 	} else if analyzedAlgorithm == 2 {
 		concurrentBruteForce(n, D, Z, 4)
+		algorithmTime = time.Since(start)
 	} else {
-		linear(n, D, Z)
+		resultLinear := linear(n, D, Z)
+		algorithmTime = time.Since(start)
+		if n <= 1000 {
+			resultBrute := bruteForce(n, D, Z)
+			if resultLinear.index != resultBrute.index || resultLinear.value != resultBrute.value {
+				fmt.Printf("ERROR: Linear and brute solutions not equal\n")
+			}
+		}
 	}
-	algorithmTime := time.Since(start)
-
 	return algorithmTime
 }
 
@@ -110,6 +113,7 @@ func main() {
 	Z := make([]int, 0)
 	var n int = 1000
 	var maxValue int = 10000
+	var analyzedAlgorithm int = 0
 	var ok bool = true
 	var err error
 	var step int = 500
@@ -156,6 +160,12 @@ func main() {
 					fmt.Printf("Bledny parametr k\n")
 					return
 				}
+			case "-g":
+				analyzedAlgorithm, err = strconv.Atoi(args[i][2:])
+				if err != nil {
+					fmt.Printf("Bledny parametr g\n")
+					return
+				}
 			case "-t":
 				step, err = strconv.Atoi(args[i][2:])
 				if err != nil {
@@ -198,7 +208,7 @@ func main() {
 			var lts time.Duration
 			for rCount > 0 {
 				D, Z = generate(n, maxValue)
-				lt= solveForAnalysis(D, Z)
+				lt= solveForAnalysis(D, Z, analyzedAlgorithm)
 				if !ok {
 					fmt.Printf("Wyniki metody brutalnej i liniowej byly rozne")
 					return
@@ -211,10 +221,10 @@ func main() {
 			n += step
 		}
 		n -= step*k
-		c := float64(linearTimes[k/2]) / float64(T(n+step*(k/2)))
+		c := float64(linearTimes[k/2]) / float64(T(n+step*(k/2), analyzedAlgorithm))
 		fmt.Printf("n \t t(n)[ms] \t q(n)\n")
 		for i := 0; i < k; i += 1 {
-			fmt.Printf("%d \t %f \t %f\n", n+step*i, float64(linearTimes[i])/1e6, float64(linearTimes[i])/(c*float64(T(n+step*i))))
+			fmt.Printf("%d \t %f \t %f\n", n+step*i, float64(linearTimes[i])/1e6, float64(linearTimes[i])/(c*float64(T(n+step*i, analyzedAlgorithm))))
 		}
 	}
 }

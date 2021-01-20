@@ -7,7 +7,6 @@ import "fmt"
 
 func printHelp() {
 	fmt.Printf("Uruchomienie programu: ./AAl_Project [Tryb uruchomienia] [Opcje trybu uruchomienia]\n")
-	fmt.Printf("Zawsze nalezy podac wszystkie opcje dostepne dla wybranego trybu\n")
 	fmt.Printf("\n[tryb uruchomienia] moze przyjac wartosc:\n")
 
 	fmt.Printf("\t-m1 - wszystkie dane pobierane ze standardowego wejscia\n")
@@ -24,6 +23,10 @@ func printHelp() {
 	fmt.Printf("\t\t-n - wielkosc problemu (domyslnie 1000)\n")
 	fmt.Printf("\t\t-w - maksymalna wartosc liczb w D i Z (domyslnie 10000)\n")
 	fmt.Printf("\t\t-s - wartosc seed dla generatora liczb pseudolosowych (domyslnie aktualny czas systemowy)\n")
+	fmt.Printf("\t\t-g - wybor analizowanego algorytmu (domyslnie 0):\n")
+	fmt.Printf("\t\t\t0 - algorytm liniowy\n")
+	fmt.Printf("\t\t\t1 - algorytm brutalny\n")
+	fmt.Printf("\t\t\t2 - algorytm brutalny wspolbiezny\n")
 
 	fmt.Printf("\tW trybie m3 parametry trybu m2 i dodatkowo:\n")
 	fmt.Printf("\t\t-k - liczba roznych wielkosci n w sekwencji generowanych problemow (domyslnie 1)\n")
