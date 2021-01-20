@@ -6,6 +6,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"math"
 	"time"
 	"os"
 	"strconv"
@@ -18,8 +19,10 @@ type result struct {
 
 // Przewidywana zlozonosc T(n)
 func T (n int, analyzedAlgorithm int) int {
-	if analyzedAlgorithm > 0{
+	if analyzedAlgorithm == 1{
 		return n*n
+	} else if analyzedAlgorithm == 2 {
+		return n*int(math.Log(float64(n)))
 	}
 	return n
 }

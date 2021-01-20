@@ -56,8 +56,24 @@ Opcje uruchomienia:
 
 Przyklad uruchomienia: `./AAL_Project -m3 -n1000 -k30 -t500 -r10 -w10000`
 
-## TODO Zastosowane algorytmy i struktury danych 
-krótki opis metody rozwiązania,  zastosowanych algorytmów i struktur danych
+## Zastosowane algorytmy
+### Algorytm brutalny
+Dla każdego z n miast koszt jest liczony osobno - da to rozwiązanie o złożoności kwadratowej, ponieważ obliczenie kosztu dla danego miasta będzie miało złożoność liniową, a samych miast jest liniowo wiele. Rozwiązanie to jest wolniejsze, jednak jest prostsze w implementacji. Dzięki temu będzie można sprawdzić poprawność rozwiązań o mniejszej złożoności obliczeniowej. Złożoność pamięciowa tego algorytmu jest liniowa, ponieważ korzysta on z tablic wejściowych, które są liniowo duże. Zmiennych pomocniczych wykorzystywanych w trakcie algorytmu (np. przechowujących najniższy koszt i indeks miasta, który ten koszt wygenerowało) jest stała liczba, zatem złożoność pamięciowa jest liniowa.
+W ramach stworzonego programu powstał także współbieżny algorytm brutalny. Idea jego działania jest bardzo podobna do zwykłego algorytmu brutalnego. Jedyną różnicą jest fakt, że algorytm współbieżny dzieli zbiór miast na k grup, gdzie k to liczba partycji, i dla każdej grupy tworzy nowy wątek (zrealizowany za pomocą goroutines). Dla każdego z miast z danej grupy wywoływana jest w nowo utworzonym wątku funkcją liniowo wyliczająca koszt dla danego miasta. Dzięki zastosowaniu współbieżności przy 4 partycjach możemy liczyć na około 2-krotnie krótszy czas działania algorytmu.
+
+### Algorytm liniowy
+W ramach preprocessingu zostanie przygotowana tablica sum prefiksowych odległości między miastami, tak aby w czasie stałym odpowiadać na pytanie o odległość między dowolnymi dwoma miastami. Najpierw dla jednego miasta, oznaczonego indeksem 0, wyliczony w czasie liniowym zostanie sumaryczny koszt wysyłki wszystkich ciężarówek wyjeżdżających z tego miasta “w lewo” (L) i “w prawo” (P). Następnie wykonane zostanie n-1 kroków przejścia z miasta i do i+1, w każdym kroku w zamortyzowanym czasie stałym zostaną wyznaczone wartości L i P dla miasta i+1, na podstawie wartości L i P dla miasta i.
+- di-(i+1) - odległość między miastami i oraz i+1
+- zi - zapotrzebowanie miasta i
+- L - koszt transportu ładunku wysłanego po okręgu zgodnie z ruchem wskazówek zegara
+- P - koszt transportu ładunku wysłanego po okręgu przeciwnie do ruchu wskazówek zegara
+- S - grupa miast w zaznaczonym wycinku okręgu - miasta, do których kierunek transportu zmieni się w danym kroku
+
+
+Krok przejścia z miasta i do i+1 na przykładzie przejścia z miasta 0 do miasta 1, gdzie znamy wartości L i P dla miasta 0 i obliczamy je (L’ i P’) dla miasta 1:
+- Nowy koszt L’ i P’:
+    - L’ = L - d0-1*(z1+z2+z3+z4) + z5*d1-5 + z6*d1-6 + z7*d1-7
+    - P’ = P + d0-1*(z8+z9+z0) - z5*d0-5 - z6*d0-6 - z7*d0-7
 
 ## Pliki źródłowe
 Projekt został zdekomponowany na kilka plików źródłowych:
@@ -68,8 +84,7 @@ Projekt został zdekomponowany na kilka plików źródłowych:
 - `ui.go` - wyświetlenie opcji programu i wczytanie danych w trybie 1
 
 
-## TODO Informacje dodatkowe
+## Informacje dodatkowe
 W trakcie pomiaru czasu algorytmu optymalnego dla małych n (n <= 1000) dodatkowo wykonywany jest algorytm brutalny, aby potwierdzić poprawność algorytmu optymalnego. Algorytm brutalny wykonywany jest po zakończeniu pomiaru czasu działania algorytmu optymalnego.
 
-
-TODO inne informacje dodatkowe o szczególnych decyzjach projektowych (np. ograniczenia dotyczące rozmiaru  problemu,  charakterystyki  generatorów  danych  testowych,  specjalne  konwencje  w alokacji  pamięci  dynamicznej,  wymagania  dotyczące  typów  parametryzujących    szablony,  konwencje związane z obsługą sytuacji wyjątkowych, itp.)
+Dane testowe były generowane losowo w zakresach określonych przez parametry uruchomienia. Wygenerowane zostały również dane testowe obejmujące przypadki szczególne - miasta oddalone od siebie o niewielkie odległości w jednej części okręgu.
